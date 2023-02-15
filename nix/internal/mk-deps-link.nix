@@ -2,10 +2,11 @@
 , linkFarm
 , writeText
 , deno2nix
+, fetchurl
 , ...
 }:
 let
-  inherit (builtins) split elemAt fetchurl toJSON hashString baseNameOf;
+  inherit (builtins) split elemAt toJSON hashString baseNameOf;
   inherit (lib) flatten mapAttrsToList importJSON;
   inherit (lib.strings) sanitizeDerivationName;
   inherit (deno2nix.internal) artifactPath;
@@ -23,18 +24,18 @@ lockfile: (
               {
                 inherit url sha256;
                 name = sanitizeDerivationName (baseNameOf url);
-                curlOpts = '' -H "User-Agent: Deno/1.0" ''
-                  };
-              }
-              {
-                name = artifactPath url + ".metadata.json";
-                path = writeText "metadata.json" (toJSON {
-                  inherit url;
-                  headers = { };
-                });
-              }
-              ]
-              )
-              (importJSON lockfile).remote
-              ))
-              )
+                curlOpts = '' -H "User-Agent: Deno/1.0" '';
+              };
+          }
+          {
+            name = artifactPath url + ".metadata.json";
+            path = writeText "metadata.json" (toJSON {
+              inherit url;
+              headers = { };
+            });
+          }
+        ]
+      )
+      (importJSON lockfile).remote
+  ))
+)
