@@ -14,9 +14,10 @@
   config,
   allow ? {},
   additionalDenoFlags ? "",
+  patches ? [],
 } @ inputs: let
   inherit (builtins) isString;
-  inherit (lib) importJSON concatStringsSep;
+  inherit (lib) concatStringsSep;
   inherit (deno2nix.internal) mkDepsLink findImportMap;
 
   allowflag = flag: (
@@ -55,7 +56,7 @@
   );
 in
   stdenv.mkDerivation {
-    inherit pname version src;
+    inherit pname version src patches;
     dontFixup = true;
 
     buildInputs = with pkgs; [deno jq];
