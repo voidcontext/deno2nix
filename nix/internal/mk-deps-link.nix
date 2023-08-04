@@ -23,7 +23,7 @@ lockfile: (
               {
                 inherit url sha256;
                 name = sanitizeDerivationName (baseNameOf url);
-                curlOptsList = [ "-H" "User-Agent: Deno/1.0" ];
+                curlOptsList = [ "-A" "Deno/1.0" ];
               };
           }
           {
