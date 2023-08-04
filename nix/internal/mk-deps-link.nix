@@ -6,7 +6,7 @@
 , ...
 }:
 let
-  inherit (builtins) split elemAt toJSON hashString baseNameOf;
+  inherit (builtins) toJSON baseNameOf;
   inherit (lib) flatten mapAttrsToList importJSON;
   inherit (lib.strings) sanitizeDerivationName;
   inherit (deno2nix.internal) artifactPath;
@@ -16,15 +16,14 @@ lockfile: (
     mapAttrsToList
       (
         url: sha256:
-        let
-        in [
+        [
           {
             name = artifactPath url;
             path = fetchurl
               {
                 inherit url sha256;
                 name = sanitizeDerivationName (baseNameOf url);
-                curlOpts = '' -H "User-Agent: Deno/1.0" '';
+                curlOptsList = [ "-H" "User-Agent: Deno/1.0" ];
               };
           }
           {
