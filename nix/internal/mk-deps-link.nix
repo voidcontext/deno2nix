@@ -3,6 +3,7 @@
 , writeText
 , deno2nix
 , fetchurl
+, deno
 , ...
 }:
 let
@@ -23,7 +24,7 @@ lockfile: (
               {
                 inherit url sha256;
                 name = sanitizeDerivationName (baseNameOf url);
-                curlOptsList = [ "-A" "Deno/1.0" ];
+                curlOptsList = [ "-A" "Deno/${deno.version}" ];
               };
           }
           {
